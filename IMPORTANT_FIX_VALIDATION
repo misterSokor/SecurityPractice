@@ -1,0 +1,16 @@
+behavior of how Hibernate handles data types like boolean and tinyint can vary
+depending on the Hibernate version and the database dialect being used.
+
+IN THIS PROJECT IS USED THE FOLLOWING DEPENDENCIES FOR VALIDATION:
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        INSTEAD OF: Hibernate Validator
+
+        2. STEP
+        WHEN YAML FILE USES BOOLEAN IT IS NECESSARY TO USE THE FOLLOWING SYNTAX:
+        INSTEAD OF boolean to use BIT
+
+

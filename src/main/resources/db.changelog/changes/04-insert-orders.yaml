@@ -1,0 +1,59 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-orders
+      author: sokortech
+      changes:
+            - insert:
+                tableName: orders
+                columns:
+                - column: {name: user_id, valueNumeric: 1}
+                - column: {name: status, value: "NEW"}
+                - column: {name: order_date, value: "2024-01-01"}
+            - insert:
+                tableName: orders
+                columns:
+                - column: { name: user_id, valueNumeric: 1 }
+                - column: { name: status, value: "PROCESSING" }
+                - column: { name: order_date, value: "2024-01-02" }
+            - insert:
+                tableName: orders
+                columns:
+                - column: { name: user_id, valueNumeric: 1 }
+                - column: { name: status, value: "SHIPPED" }
+                - column: { name: order_date, value: "2024-01-03" }
+            - insert:
+                tableName: orders
+                columns:
+                  - column: {name: user_id, valueNumeric: 2}
+                  - column: {name: status, value: "NEW"}
+                  - column: {name: order_date, value: "2024-01-04"}
+            - insert:
+                tableName: orders
+                columns:
+                  - column: { name: user_id, valueNumeric: 2 }
+                  - column: { name: status, value: "PENDING" }
+                  - column: { name: order_date, value: "2024-01-05" }
+            - insert:
+                tableName: orders
+                columns:
+                  - column: { name: user_id, valueNumeric: 2 }
+                  - column: { name: status, value: "DELIVERED" }
+                  - column: { name: order_date, value: "2024-01-06" }
+            - insert:
+                tableName: orders
+                columns:
+                  - column: {name: user_id, valueNumeric: 3}
+                  - column: {name: status, value: "NEW"}
+                  - column: {name: order_date, value: "2024-01-07"}
+            - insert:
+                tableName: orders
+                columns:
+                  - column: { name: user_id, valueNumeric: 3 }
+                  - column: { name: status, value: "CANCELED" }
+                  - column: { name: order_date, value: "2024-01-08" }
+            - insert:
+                tableName: orders
+                columns:
+                  - column: { name: user_id, valueNumeric: 3 }
+                  - column: { name: status, value: "SHIPPED" }
+                  - column: { name: order_date, value: "2024-01-09" }
