@@ -12,17 +12,7 @@ import org.springframework.stereotype.Component;
 public class AuthenticationManager {
     private final AuthenticationService authenticationService;
 
-    public boolean isValidAuthentication(AuthLoginPasswordObjectToken authLoginPasswordObjectToken) {
-        if (authLoginPasswordObjectToken == null) {
-            return false;
-        }
-
-        // check if email is correct and everything is good with it
-        String email = (String)authLoginPasswordObjectToken.getPrincipal();
-        String password =
-                (String) authLoginPasswordObjectToken.getCredentials();
-
-        return authenticationService.authenticate(
-                new UserLoginRequestDto(email, password));
+    public boolean isValidAuthentication(UserLoginRequestDto requestDto) {
+        return authenticationService.validateCredentials(requestDto).isPresent();
     }
 }

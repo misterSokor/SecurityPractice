@@ -12,10 +12,22 @@ import org.springframework.stereotype.Service;
 public class AuthenticationService {
     private final UserRepository userRepository;
 
-    public boolean authenticate(UserLoginRequestDto requestDto) {
+    public String authenticate(UserLoginRequestDto requestDto) {
+        Optional<User> validUser = validateCredentials(requestDto);
+        if (validUser.isPresent()) {
+            return "Welcome! " + validUser.get().getEmail()
+                   + " You have successfully logged in.";
+        }
+        return "User is not authenticated. Please check your credentials";
+    }
+
+    public Optional<User> validateCredentials(UserLoginRequestDto requestDto) {
         Optional<User> userFromRepository =
                 userRepository.findByEmail(requestDto.email());
-        return userFromRepository.isPresent()
-               && userFromRepository.get().getPassword().equals(requestDto.password());
+        if (userFromRepository.isPresent() &&
+            userFromRepository.get().getPassword().equals(requestDto.password())) {
+            return userFromRepository;
+        }
+        return Optional.empty();
     }
 }

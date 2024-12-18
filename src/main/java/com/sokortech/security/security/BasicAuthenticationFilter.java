@@ -3,6 +3,8 @@ package com.sokortech.security.security;
 import java.io.IOException;
 import java.util.Base64;
 import com.sokortech.security.exception.BadCredentialException;
+import com.sokortech.security.model.User;
+import com.sokortech.security.repository.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpFilter;
@@ -19,6 +21,7 @@ public class BasicAuthenticationFilter extends HttpFilter {
     private static final int CUT_POINT_OF_WORD_BASIC = 6;
 
     private final AuthenticationManager authenticationManager;
+    private final UserRepository userRepository;
     @Override
     protected void doFilter(HttpServletRequest request,
                             HttpServletResponse response,
@@ -40,9 +43,34 @@ public class BasicAuthenticationFilter extends HttpFilter {
         // 1. Extract the Authorization header from the request
         // 2. parse the header from format Base64 to get the login and password
         AuthLoginPasswordObjectToken parsedAuthToken = parseAuthToken(request);
-        // check if it is valid
-        if (!authenticationManager.isValidAuthentication(parsedAuthToken)) {
+        if (parsedAuthToken == null) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("Authorization header is missing or invalid.");
+            return;
+        }
+
+        // check if the token is valid
+
+        String email = (String) parsedAuthToken.getPrincipal();
+        String password = (String) parsedAuthToken.getCredentials();
+
+        try {
+            User user = userRepository.findByEmail(email)
+                    .orElseThrow(() -> new BadCredentialException("User not found"));
+
+        // Compare hashed passwords
+//        if (!passwordEncoder.matches(password, user.getPassword())) {
+//            throw new BadCredentialException("Login or password is incorrect");
+//        }
+
+        // Compare plain text passwords
+        if (!password.equals(user.getPassword())) {
+            throw new BadCredentialException("Login or password is incorrect");
+        }
+
+        } catch (BadCredentialException e) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write(e.getMessage());
             return;
         }
         chain.doFilter(request, response);
@@ -57,7 +85,8 @@ public class BasicAuthenticationFilter extends HttpFilter {
         header = header.trim(); // removes all spaces in the header from user
 
         // helps to ignore upper or lower cases in the word
-        // this condition checks if there word basic (now does not matter if
+        // this condition checks if there is a word basic in the beginning of
+        // this header (now does not matter if
         // it's case-sensitive
         if (!StringUtils.startsWithIgnoreCase(header,
                 AUTHORIZATION_SCHEMA_BASIC)) {
