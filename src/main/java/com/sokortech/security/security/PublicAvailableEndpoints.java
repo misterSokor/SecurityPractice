@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 public class PublicAvailableEndpoints {
-    private static List<String> publicEndpoints = List.of(
+    private static List<String> publicEndpoints = List.of (
             "/auth/login",
             "/auth/registration"
     );

@@ -1,6 +1,9 @@
 package com.sokortech.security.controller;
 
 import com.sokortech.security.dto.order.OrderDto;
+import com.sokortech.security.security.AuthLoginPasswordObjectToken;
+import com.sokortech.security.security.SecurityContext;
+import com.sokortech.security.security.SecurityContextHolder;
 import org.springframework.data.domain.Pageable;
 import java.util.List;
 import com.sokortech.security.model.Order;
@@ -18,6 +21,12 @@ public class OrderController {
 
     @GetMapping
     public List<OrderDto> findAll(Pageable pageable) {
-        return orderService.findAll(pageable);
+        AuthLoginPasswordObjectToken authLoginPasswordObject =
+                SecurityContextHolder.getSecurityContext().getAuthLoginPasswordObject();
+
+        String email = (String) authLoginPasswordObject.getPrincipal();
+        return orderService.findAllForSpecificUser(email, pageable);
     }
+
+
 }

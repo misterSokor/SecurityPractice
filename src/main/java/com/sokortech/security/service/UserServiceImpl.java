@@ -26,4 +26,11 @@ public class UserServiceImpl implements UserService {
 
         return userMapper.toUserResponse(savedUser);
     }
+
+    @Override
+    public UserResponseDto getByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .map(user -> userMapper.toUserResponse(user))
+                .orElseThrow(() -> new RuntimeException("Can't find user"));
+    }
 }
