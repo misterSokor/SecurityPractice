@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class AuthenticationManager {
     private final AuthenticationService authenticationService;
-
     public boolean isValidAuthentication(AuthLoginPasswordObjectToken authLoginPasswordObjectToken) {
         if (authLoginPasswordObjectToken == null) {
             return false;

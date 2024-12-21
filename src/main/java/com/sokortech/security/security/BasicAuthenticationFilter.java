@@ -45,6 +45,8 @@ public class BasicAuthenticationFilter extends HttpFilter {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
+
+        SecurityContextHolder.getSecurityContext().setAuthLoginPasswordObject(parsedAuthToken);
         chain.doFilter(request, response);
     }
 
